@@ -277,8 +277,8 @@ public class AVLTree<ContentType extends ComparableContent<ContentType>> {
     public void rotateRight() {
 
         AVLTree<ContentType> X = this;
-        AVLTree<ContentType> Z = this.getRightTree();
-        AVLTree<ContentType> t23 = Z.getLeftTree();
+        AVLTree<ContentType> Z = this.getLeftTree();
+        AVLTree<ContentType> t23 = Z.getRightTree();
         AVLTree<ContentType> par = this.parent;
 
         if(par.getLeftTree() == X) {
@@ -288,19 +288,85 @@ public class AVLTree<ContentType extends ComparableContent<ContentType>> {
         }
         Z.parent = par;
 
-        Z.left = X;
+        Z.right = X;
         X.parent = Z;
 
-        X.right = t23;
+        X.left = t23;
         t23.parent = X;
 
     }
     
     public void rotateRightLeft() {
 
+        AVLTree<ContentType> X = this;
+        AVLTree<ContentType> Z = this.getRightTree();
+        AVLTree<ContentType> Y = Z.getLeftTree();
+        AVLTree<ContentType> t2 = Y.getLeftTree();
+        AVLTree<ContentType> t3 = Y.getRightTree();
+        AVLTree<ContentType> par = this.parent;
+
+        
+        if(par.getLeftTree() == X) {
+            par.left = Y;
+        } else if (par.getRightTree() == X) {
+            par.right = Y;
+        }
+        Y.parent = par;
+
+        Y.left = X;
+        X.parent = Y;
+
+        Y.right = Z;
+        Z.parent = Y;
+
+        Z.left = t3;
+        t3.parent = Z;
+
+        Z.right = t4;
+        t4.parent = Z;
+
+        X.right = t2;
+        t2.parent = X;
+
+        X.left = t1;
+        t1.parent = X;
+
     }
 
     public void rotateLeftRight() {
+
+        AVLTree<ContentType> X = this;
+        AVLTree<ContentType> Z = this.getLeftTree();
+        AVLTree<ContentType> Y = Z.getRightTree();
+        AVLTree<ContentType> t2 = Y.getLeftTree();
+        AVLTree<ContentType> t3 = Y.getRightTree();
+        AVLTree<ContentType> par = this.parent;
+
+        
+        if(par.getLeftTree() == X) {
+            par.left = Y;
+        } else if (par.getRightTree() == X) {
+            par.right = Y;
+        }
+        Y.parent = par;
+
+        Y.left = Z;
+        Z.parent = Y;
+
+        Y.right = X;
+        X.parent = Y;
+
+        Z.left = t1;
+        t1.parent = Z;
+
+        Z.right = t2;
+        t2.parent = Z;
+
+        X.right = t4;
+        t4.parent = X;
+
+        X.left = t3;
+        t3.parent = X;
 
     }
     
