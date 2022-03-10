@@ -1,5 +1,5 @@
 /**
- * Implementierung der GUI zum Binären Suchbaum.
+ * Implementierung der GUI zum Binï¿½ren Suchbaum.
  * 
  * @author M. Hoffmann
  * @version 13.01.2018
@@ -15,10 +15,10 @@ public class GUI extends Frame{
     private AVLTree<Entry> avlT;
 
     /**
-     * Konstruktor für Objekte der Klasse GUI
+     * Konstruktor fï¿½r Objekte der Klasse GUI
      */
     public GUI(){
-        super("Binärer Suchbaum");
+        super("Binaerer Suchbaum");
         setLayout(null);
         setBounds(0,0,1200,650);
 
