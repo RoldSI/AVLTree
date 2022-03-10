@@ -79,7 +79,8 @@ public class GUI extends Frame{
         btInOrder.setBounds(20,540,80,20);
         btInOrder.addActionListener(new ActionListener(){
                 public void actionPerformed(ActionEvent e){
-                    //tfAnzeige.setText(sB.inOrder(sB.getTree()));
+                    System.out.println("Wir sind hier.");
+                    tfAnzeige.setText(avlT.height() + " " + avlT.balanceFactor());
                 }
             });
         add(btInOrder);
