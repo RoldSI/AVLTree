@@ -229,6 +229,80 @@ public class AVLTree<ContentType extends ComparableContent<ContentType>> {
             }
         }
     }
+
+    public AVLTree<ContentType> find(ContentType pContent) {
+        if (this.isEmpty() || pContent == null) {
+            // Abbrechen, da es kein Element zu suchen gibt.
+            return null;
+        } else {
+            //ContentType content = this.getContent();
+            if (pContent.isLess(this.content)) {
+                // Element wird im linken Teilbaum gesucht.
+                return this.getLeftTree().find(pContent);
+            } else if (pContent.isGreater(this.content)) {
+                // Element wird im rechten Teilbaum ge  sucht.
+                return this.getRightTree().find(pContent);
+            } else if (pContent.isEqual(this.content)) {
+                // Element wurde gefunden.
+              return this;               
+            } else {    
+              // Dieser Fall sollte nicht auftreten.
+                return null;
+            }
+        }
+    }
+
+    public void rotateLeft() {
+
+        AVLTree<ContentType> X = this;
+        AVLTree<ContentType> Z = this.getRightTree();
+        AVLTree<ContentType> t23 = Z.getLeftTree();
+        AVLTree<ContentType> par = this.parent;
+
+        if(par.getLeftTree() == X) {
+            par.left = Z;
+        } else if (par.getRightTree() == X) {
+            par.right = Z;
+        }
+        Z.parent = par;
+
+        Z.left = X;
+        X.parent = Z;
+
+        X.right = t23;
+        t23.parent = X;
+
+    }
+
+    public void rotateRight() {
+
+        AVLTree<ContentType> X = this;
+        AVLTree<ContentType> Z = this.getRightTree();
+        AVLTree<ContentType> t23 = Z.getLeftTree();
+        AVLTree<ContentType> par = this.parent;
+
+        if(par.getLeftTree() == X) {
+            par.left = Z;
+        } else if (par.getRightTree() == X) {
+            par.right = Z;
+        }
+        Z.parent = par;
+
+        Z.left = X;
+        X.parent = Z;
+
+        X.right = t23;
+        t23.parent = X;
+
+    }
+    
+    public void rotateRightLeft() {
+
+    }
+
+    public void rotateLeftRight() {
+
+    }
     
     public int height() {
         if (this.isEmpty()) return 0;
