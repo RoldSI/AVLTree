@@ -252,7 +252,57 @@ public class AVLTree<ContentType extends ComparableContent<ContentType>> {
         }
     }
 
-    public void rotateLeft() {
+    public void rotateOnInsert() {
+        
+        case (this.balanceFactor()) {
+            case -1, 1:
+                if(this.parent != null) this.parent.rotateOnInsert();
+                break;
+            case -2, 2:
+                if(this.parent != null) this.rotate(); //rebalancing needed here
+                return;
+                break;
+            case default;
+                return;
+        }
+
+    }
+
+    public void rotateOnRemove() {
+        
+        case (this.balanceFactor()) {
+            case 0:
+                if(this.parent != null) this.parent.rotateOnInsert();
+                break;
+            case -2, 2:
+                if(this.parent != null) this.rotate(); //rebalancing needed here
+                this.parent.rotateOnRemove();
+                break;
+            case default;
+                return;
+        }
+
+    }
+
+    public void rotate() {
+
+        if (this.right.height() > this.left.height()) {
+            if (this.right.left <= this.right.right) {
+                this.rotateRightRight();
+            } else {
+                this.rotateRightLeft();
+            }
+        } else if (this.right.height() < this.left.height()) {
+            if (this.left.right <= this.left.left) {
+                this.rotateLeftLeft();
+            } else {
+                this.rotateLeftRight();
+            }
+        }
+
+    }
+
+    public void rotateLeftLeft() {
 
         AVLTree<ContentType> X = this;
         AVLTree<ContentType> Z = this.getRightTree();
@@ -274,7 +324,7 @@ public class AVLTree<ContentType extends ComparableContent<ContentType>> {
 
     }
 
-    public void rotateRight() {
+    public void rotateRightRight() {
 
         AVLTree<ContentType> X = this;
         AVLTree<ContentType> Z = this.getLeftTree();
