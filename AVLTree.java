@@ -169,29 +169,36 @@ public class AVLTree<ContentType extends ComparableContent<ContentType>> {
                     this.content = null;
                     this.right = null;
                     this.left = null;
-                    if(this.parent != null) this.parent.rotateOnRemove();
+                    //if(this.parent != null) this.parent.rotateOnRemove();
                 } else {
                     // Es gibt nur rechts einen Nachfolger.
                     //node = getNodeOfRightSuccessor();
                     this.content = this.getRightTree().getContent();
                     this.right = this.getRightTree().getRightTree();
+                    if (this.right == null) System.out.println("DAS IST VERFLUCHTE SCHEISSE ALTER");
+                    //this.right.parent = this;
                     this.left = this.getRightTree().getLeftTree();
-                    if(this.parent != null) this.parent.rotateOnRemove();
+                    if (this.left == null) System.out.println("DAS IST VERFLUCHTE SCHEISSE MATTHIAS");
+                    //this.left.parent = this;
+                    //if(this.parent != null) this.parent.rotateOnRemove();
                 }
             } else if (this.right.isEmpty()) {
                 // Es gibt nur links einen Nachfolger.
                 //node = getNodeOfLeftSuccessor();
                 this.content = this.getLeftTree().getContent();
                 this.right = this.getLeftTree().getRightTree();
+                //this.right.parent = this;
                 this.left = this.getLeftTree().getLeftTree();
-                    if(this.parent != null) this.parent.rotateOnRemove();
+                //this.left.parent = this;
+                //if(this.parent != null) this.parent.rotateOnRemove();
             } else {
                 // Es gibt links und rechts einen Nachfolger.
                 if (this.getRightTree().left.isEmpty()) {
                     // Der rechte Nachfolger hat keinen linken Nachfolger.
                     this.content = getRightTree().content;
                     this.right = getRightTree().right;
-                    if(this.parent != null) this.parent.rotateOnRemove();
+                    //this.right.parent = this;
+                    //if(this.parent != null) this.parent.rotateOnRemove();
                 } else { //HIER
                     AVLTree<ContentType> previous = this.right
                             .ancestorOfSmallRight();
