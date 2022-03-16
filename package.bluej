@@ -1,12 +1,12 @@
 #BlueJ package file
-dependency1.from=GUI
-dependency1.to=AVLTree
+dependency1.from=AVLTree
+dependency1.to=ComparableContent
 dependency1.type=UsesDependency
 dependency2.from=GUI
-dependency2.to=Entry
+dependency2.to=AVLTree
 dependency2.type=UsesDependency
-dependency3.from=AVLTree
-dependency3.to=ComparableContent
+dependency3.from=GUI
+dependency3.to=Entry
 dependency3.type=UsesDependency
 editor.fx.0.height=801
 editor.fx.0.width=1311

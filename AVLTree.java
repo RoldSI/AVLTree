@@ -169,12 +169,14 @@ public class AVLTree<ContentType extends ComparableContent<ContentType>> {
                     this.content = null;
                     this.right = null;
                     this.left = null;
+                    if(this.parent != null) this.parent.rotateOnRemove();
                 } else {
                     // Es gibt nur rechts einen Nachfolger.
                     //node = getNodeOfRightSuccessor();
                     this.content = this.getRightTree().getContent();
                     this.right = this.getRightTree().getRightTree();
                     this.left = this.getRightTree().getLeftTree();
+                    if(this.parent != null) this.parent.rotateOnRemove();
                 }
             } else if (this.right.isEmpty()) {
                 // Es gibt nur links einen Nachfolger.
@@ -182,18 +184,21 @@ public class AVLTree<ContentType extends ComparableContent<ContentType>> {
                 this.content = this.getLeftTree().getContent();
                 this.right = this.getLeftTree().getRightTree();
                 this.left = this.getLeftTree().getLeftTree();
+                    if(this.parent != null) this.parent.rotateOnRemove();
             } else {
                 // Es gibt links und rechts einen Nachfolger.
                 if (this.getRightTree().left.isEmpty()) {
                     // Der rechte Nachfolger hat keinen linken Nachfolger.
                     this.content = getRightTree().content;
                     this.right = getRightTree().right;
+                    if(this.parent != null) this.parent.rotateOnRemove();
                 } else { //HIER
                     AVLTree<ContentType> previous = this.right
                             .ancestorOfSmallRight();
                     AVLTree<ContentType> smallest = previous.left;
                     this.content = smallest.content;
                     previous.remove(smallest.content);
+
                 }
             }
         }       
@@ -258,18 +263,23 @@ public class AVLTree<ContentType extends ComparableContent<ContentType>> {
         
         switch (this.balanceFactor()) {
             case 1:
+                System.out.println("case 1");
                 if(this.parent != null) this.parent.rotateOnInsert();
                 break;
             case -1:
+                System.out.println("case -1");
                 if(this.parent != null) this.parent.rotateOnInsert();
                 break;
             case 2:
-                if(this.parent != null) this.rotate(); //rebalancing needed here
+                System.out.println("case 2");
+                if(this.parent != null) this.rotate();
                 return;
             case -2:
-                if(this.parent != null) this.rotate(); //rebalancing needed here
+                System.out.println("case -2");
+                if(this.parent != null) this.rotate();
                 return;
             default:
+                System.out.println("case 0");
                 return;
         }
 
@@ -279,17 +289,21 @@ public class AVLTree<ContentType extends ComparableContent<ContentType>> {
         
         switch (this.balanceFactor()) {
             case 0:
+                System.out.println("case 0");
                 if(this.parent != null) this.parent.rotateOnInsert();
                 break;
             case 2:
+                System.out.println("case 2");
                 if(this.parent != null) this.rotate(); //rebalancing needed here
                 this.parent.rotateOnRemove();
                 break;
             case -2:
+                System.out.println("case -2");
                 if(this.parent != null) this.rotate(); //rebalancing needed here
                 this.parent.rotateOnRemove();
                 break;
             default:
+                System.out.println("case -1 & 1");
                 return;
         }
 
@@ -298,22 +312,26 @@ public class AVLTree<ContentType extends ComparableContent<ContentType>> {
     public void rotate() {
 
         if (this.right.height() > this.left.height()) {
-            if (this.right.left.height() <= this.right.right.height()) {
-                this.rotateRightRight();
-            } else {
+            if (this.right.left.height() > this.right.right.height()) {
+                System.out.println("right left");
                 this.rotateRightLeft();
+            } else {
+                System.out.println("right right");
+                this.rotateRightRight();
             }
         } else if (this.right.height() < this.left.height()) {
-            if (this.left.right.height() <= this.left.left.height()) {
-                this.rotateLeftLeft();
-            } else {
+            if (this.left.right.height() > this.left.left.height()) {
+                System.out.println("left right");
                 this.rotateLeftRight();
+            } else {
+                System.out.println("left left");
+                this.rotateLeftLeft();
             }
         }
 
     }
 
-    public void rotateLeftLeft() {
+    public void rotateRightRight() {
 
         AVLTree<ContentType> X = this;
         AVLTree<ContentType> Z = this.getRightTree();
@@ -335,7 +353,7 @@ public class AVLTree<ContentType extends ComparableContent<ContentType>> {
 
     }
 
-    public void rotateRightRight() {
+    public void rotateLeftLeft() {
 
         AVLTree<ContentType> X = this;
         AVLTree<ContentType> Z = this.getLeftTree();
@@ -421,8 +439,10 @@ public class AVLTree<ContentType extends ComparableContent<ContentType>> {
     
     public int height() {
         if (this.isEmpty()) return 0;
-        int heightLeft = this.left.height();
-        int heightRight = this.right.height();
+        int heightLeft = 0;
+        if(this.left != null) heightLeft = this.left.height();
+        int heightRight = 0;
+        if(this.right != null) heightRight = this.right.height();
         return Math.max(heightLeft, heightRight)+1;
     }
     

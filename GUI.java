@@ -108,14 +108,10 @@ public class GUI extends Frame{
     
     public void reset() {
         avlT = new AVLTree<Entry>(null);
+        avlT.insert(new Entry(0));
         avlT.insert(new Entry(5));
-        avlT.insert(new Entry(10));
-        avlT.insert(new Entry(2));
-        avlT.insert(new Entry(3));
-        avlT.insert(new Entry(1));
-        avlT.insert(new Entry(9));
-        avlT.insert(new Entry(12));
-        avlT.insert(new Entry(11));
+        avlT.insert(new Entry(-2));
+        avlT.insert(new Entry(8));
         repaint();
     }
     
