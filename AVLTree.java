@@ -170,6 +170,7 @@ public class AVLTree<ContentType extends ComparableContent<ContentType>> {
                     this.right = null;
                     this.left = null;
                     //if(this.parent != null) this.parent.rotateOnRemove();
+                    this.rotateOnRemove();
                 } else {
                     // Es gibt nur rechts einen Nachfolger.
                     //node = getNodeOfRightSuccessor();
@@ -181,6 +182,7 @@ public class AVLTree<ContentType extends ComparableContent<ContentType>> {
                     if (this.right == null) System.out.println("DAS IST VERFLUCHTE SCHEISSE ALTER");
                     this.right.parent = this;
                     //if(this.parent != null) this.parent.rotateOnRemove();
+                    this.rotateOnRemove();
                 }
             } else if (this.right.isEmpty()) {
                 // Es gibt nur links einen Nachfolger.
@@ -191,6 +193,7 @@ public class AVLTree<ContentType extends ComparableContent<ContentType>> {
                 this.left = this.getLeftTree().getLeftTree();
                 this.left.parent = this;
                 //if(this.parent != null) this.parent.rotateOnRemove();
+                this.rotateOnRemove();
             } else {
                 // Es gibt links und rechts einen Nachfolger.
                 if (this.getRightTree().left.isEmpty()) {
@@ -199,6 +202,7 @@ public class AVLTree<ContentType extends ComparableContent<ContentType>> {
                     this.right = getRightTree().right;
                     this.right.parent = this;
                     //if(this.parent != null) this.parent.rotateOnRemove();
+                    this.rotateOnRemove();
                 } else { //HIER
                     AVLTree<ContentType> previous = this.right
                             .ancestorOfSmallRight();
@@ -279,11 +283,11 @@ public class AVLTree<ContentType extends ComparableContent<ContentType>> {
                 break;
             case 2:
                 System.out.println("case 2");
-                if(this.parent != null) this.rotate();
+                /*if(this.parent != null) */this.rotate();
                 return;
             case -2:
                 System.out.println("case -2");
-                if(this.parent != null) this.rotate();
+                /*if(this.parent != null) */this.rotate();
                 return;
             default:
                 System.out.println("case 0");
@@ -301,12 +305,12 @@ public class AVLTree<ContentType extends ComparableContent<ContentType>> {
                 break;
             case 2:
                 System.out.println("case 2");
-                if(this.parent != null) this.rotate(); //rebalancing needed here
+                /*if(this.parent != null) */this.rotate(); //rebalancing needed here
                 this.parent.rotateOnRemove();
                 break;
             case -2:
                 System.out.println("case -2");
-                if(this.parent != null) this.rotate(); //rebalancing needed here
+                /*if(this.parent != null) */this.rotate(); //rebalancing needed here
                 this.parent.rotateOnRemove();
                 break;
             default:
@@ -342,21 +346,45 @@ public class AVLTree<ContentType extends ComparableContent<ContentType>> {
 
         AVLTree<ContentType> X = this;
         AVLTree<ContentType> Z = this.getRightTree();
+        AVLTree<ContentType> t1 = X.getLeftTree();
         AVLTree<ContentType> t23 = Z.getLeftTree();
-        AVLTree<ContentType> par = this.parent;
+        AVLTree<ContentType> t4 = Z.getRightTree();
 
-        if(par.getLeftTree() == X) {
-            par.left = Z;
-        } else if (par.getRightTree() == X) {
-            par.right = Z;
+        if(this.parent != null) {
+            System.out.println("IF");
+            AVLTree<ContentType> par = this.parent;
+
+            if(par.getLeftTree() == X) {
+                par.left = Z;
+            } else if (par.getRightTree() == X) {
+                par.right = Z;
+            }
+            Z.parent = par;
+
+            Z.left = X;
+            X.parent = Z;
+
+            X.right = t23;
+            t23.parent = X;
+        } else {
+            System.out.println("ELSE");
+
+            ContentType zContent = Z.content;
+            Z.content = X.content;
+            X.content = zContent;
+
+            X.left = Z;
+            Z.parent = X;
+
+            X.right = t4;
+            t4.parent = X;
+
+            Z.left = t1;
+            t1.parent = Z;
+
+            Z.right = t23;
+            t23.parent = Z;
         }
-        Z.parent = par;
-
-        Z.left = X;
-        X.parent = Z;
-
-        X.right = t23;
-        t23.parent = X;
 
     }
 
@@ -364,21 +392,44 @@ public class AVLTree<ContentType extends ComparableContent<ContentType>> {
 
         AVLTree<ContentType> X = this;
         AVLTree<ContentType> Z = this.getLeftTree();
+        AVLTree<ContentType> t1 = Z.getLeftTree();
         AVLTree<ContentType> t23 = Z.getRightTree();
-        AVLTree<ContentType> par = this.parent;
+        AVLTree<ContentType> t4 = this.getRightTree();
 
-        if(par.getLeftTree() == X) {
-            par.left = Z;
-        } else if (par.getRightTree() == X) {
-            par.right = Z;
+        if(this.parent != null) {
+            AVLTree<ContentType> par = this.parent;
+
+            if(par.getLeftTree() == X) {
+                par.left = Z;
+            } else if (par.getRightTree() == X) {
+                par.right = Z;
+            }
+            Z.parent = par;
+
+            Z.right = X;
+            X.parent = Z;
+
+            X.left = t23;
+            t23.parent = X;
+        } else {
+            System.out.println("ELSE");
+
+            ContentType zContent = Z.content;
+            Z.content = X.content;
+            X.content = zContent;
+
+            X.left = t1;
+            t1.parent = X;
+
+            X.right = Z;
+            Z.parent = X;
+
+            Z.left = t23;
+            t23.parent = Z;
+
+            Z.right = t4;
+            t4.parent = Z;
         }
-        Z.parent = par;
-
-        Z.right = X;
-        X.parent = Z;
-
-        X.left = t23;
-        t23.parent = X;
 
     }
     
@@ -387,29 +438,40 @@ public class AVLTree<ContentType extends ComparableContent<ContentType>> {
         AVLTree<ContentType> X = this;
         AVLTree<ContentType> Z = this.getRightTree();
         AVLTree<ContentType> Y = Z.getLeftTree();
+        AVLTree<ContentType> t1 = X.getLeftTree();
         AVLTree<ContentType> t2 = Y.getLeftTree();
         AVLTree<ContentType> t3 = Y.getRightTree();
-        AVLTree<ContentType> par = this.parent;
+        AVLTree<ContentType> t4 = Z.getRightTree();
 
-        
-        if(par.getLeftTree() == X) {
-            par.left = Y;
-        } else if (par.getRightTree() == X) {
-            par.right = Y;
+        if (this.parent != null) {
+            System.out.println("IF");
+            AVLTree<ContentType> par = this.parent;
+ 
+            if(par.getLeftTree() == X) {
+                par.left = Y;
+            } else if (par.getRightTree() == X) {
+                par.right = Y;
+            }
+            Y.parent = par;
+
+            Y.left = X;
+            X.parent = Y;
+
+            Y.right = Z;
+            Z.parent = Y;
+
+            Z.left = t3;
+            t3.parent = Z;
+
+            X.right = t2;
+            t2.parent = X;
+        } else {
+            System.out.println("ELSE");
+
+            this.getRightTree().rotateLeftLeft();
+            this.rotateRightRight();
+
         }
-        Y.parent = par;
-
-        Y.left = X;
-        X.parent = Y;
-
-        Y.right = Z;
-        Z.parent = Y;
-
-        Z.left = t3;
-        t3.parent = Z;
-
-        X.right = t2;
-        t2.parent = X;
 
     }
 
@@ -420,27 +482,35 @@ public class AVLTree<ContentType extends ComparableContent<ContentType>> {
         AVLTree<ContentType> Y = Z.getRightTree();
         AVLTree<ContentType> t2 = Y.getLeftTree();
         AVLTree<ContentType> t3 = Y.getRightTree();
-        AVLTree<ContentType> par = this.parent;
 
-        
-        if(par.getLeftTree() == X) {
-            par.left = Y;
-        } else if (par.getRightTree() == X) {
-            par.right = Y;
+        if (this.parent != null) {
+            AVLTree<ContentType> par = this.parent;
+
+            if(par.getLeftTree() == X) {
+                par.left = Y;
+            } else if (par.getRightTree() == X) {
+                par.right = Y;
+            }
+            Y.parent = par;
+
+            Y.left = Z;
+            Z.parent = Y;
+
+            Y.right = X;
+            X.parent = Y;
+
+            Z.right = t2;
+            t2.parent = Z;
+
+            X.left = t3;
+            t3.parent = X;
+        } else {
+            System.out.println("ELSE");
+
+            this.getLeftTree().rotateRightRight();
+            this.rotateLeftLeft();
+
         }
-        Y.parent = par;
-
-        Y.left = Z;
-        Z.parent = Y;
-
-        Y.right = X;
-        X.parent = Y;
-
-        Z.right = t2;
-        t2.parent = Z;
-
-        X.left = t3;
-        t3.parent = X;
 
     }
     
